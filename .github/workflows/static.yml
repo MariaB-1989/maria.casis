@@ -1,0 +1,161 @@
+// Initializing full HR Portal project...
+// Phase 1: Frontend (React + Tailwind CSS)
+
+// File: client/src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import Attendance from "./pages/Attendance";
+import LeaveManagement from "./pages/LeaveManagement";
+import Calendar from "./pages/Calendar";
+import Profile from "./pages/Profile";
+import ActivityLog from "./pages/ActivityLog";
+import Sidebar from "./components/Sidebar";
+
+export default function App() {
+  return (
+    <Router>
+      <div className="flex">
+        <Sidebar />
+        <div className="flex-1 p-4">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/leave" element={<LeaveManagement />} />
+            <Route path="/calendar" element={<Calendar />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/activity-log" element={<ActivityLog />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+}
+
+// File: client/src/components/Sidebar.jsx
+import { Link } from "react-router-dom";
+
+const Sidebar = () => {
+  return (
+    <div className="w-64 bg-green-100 min-h-screen p-4">
+      <h2 className="text-xl font-bold mb-4">HR Portal</h2>
+      <ul>
+        <li><Link to="/">Dashboard</Link></li>
+        <li><Link to="/profile">My Profile</Link></li>
+        <li><Link to="/attendance">Attendance</Link></li>
+        <li><Link to="/leave">Leave Management</Link></li>
+        <li><Link to="/calendar">Company Calendar</Link></li>
+        <li><Link to="/activity-log">Activity Log</Link></li>
+      </ul>
+    </div>
+  );
+};
+
+export default Sidebar;
+
+// File: client/src/pages/Dashboard.jsx
+export default function Dashboard() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white p-4 rounded shadow">Clock Status</div>
+        <div className="bg-white p-4 rounded shadow">Work Hours</div>
+        <div className="bg-white p-4 rounded shadow">Leave Balance</div>
+        <div className="bg-white p-4 rounded shadow">Pending Tasks</div>
+      </div>
+    </div>
+  );
+}
+
+// File: client/src/pages/Attendance.jsx
+export default function Attendance() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Attendance</h1>
+      <p>View and manage daily attendance logs here.</p>
+    </div>
+  );
+}
+
+// File: client/src/pages/LeaveManagement.jsx
+export default function LeaveManagement() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Leave Management</h1>
+      <p>Request and review leave applications.</p>
+    </div>
+  );
+}
+
+// File: client/src/pages/Calendar.jsx
+export default function Calendar() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Company Calendar</h1>
+      <p>See company holidays and events.</p>
+    </div>
+  );
+}
+
+// File: client/src/pages/Profile.jsx
+export default function Profile() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">My Profile</h1>
+      <p>View and update your profile details.</p>
+    </div>
+  );
+}
+
+// File: client/src/pages/ActivityLog.jsx
+export default function ActivityLog() {
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-4">Activity Log</h1>
+      <p>Track login, breaks, and logout activity.</p>
+    </div>
+  );
+}
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
